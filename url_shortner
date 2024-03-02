@@ -1,0 +1,46 @@
+import hashlib
+
+class URLShortener:
+    def __init__(self):
+        self.url_mapping = {}
+
+    def generate_short_url(self, long_url):
+        # Using MD5 hash for simplicity; you might want to use a more secure hash function
+        hash_object = hashlib.md5(long_url.encode())
+        short_url = hash_object.hexdigest()[:8]  # Use the first 8 characters of the hash as the short URL
+        self.url_mapping[short_url] = long_url
+        return short_url
+
+    def retrieve_long_url(self, short_url):
+        return self.url_mapping.get(short_url, None)
+
+def main():
+    url_shortener = URLShortener()
+
+    while True:
+        print("\nURL Shortener Menu:")
+        print("1. Shorten URL")
+        print("2. Retrieve Long URL")
+        print("3. Exit")
+
+        choice = input("Enter your choice (1/2/3): ")
+
+        if choice == '1':
+            long_url = input("Enter the long URL: ")
+            short_url = url_shortener.generate_short_url(long_url)
+            print(f"Shortened URL: http://short.url/{short_url}")
+        elif choice == '2':
+            short_url = input("Enter the short URL: ")
+            long_url = url_shortener.retrieve_long_url(short_url)
+            if long_url:
+                print(f"Original URL: {long_url}")
+            else:
+                print("Short URL not found.")
+        elif choice == '3':
+            print("Exiting the URL shortener. Goodbye!")
+            break
+        else:
+            print("Invalid choice. Please enter a valid option.")
+
+if __name__ == "__main__":
+    main()
